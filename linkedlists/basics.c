@@ -43,8 +43,72 @@ int listlen(Node * root){
 void printNode(Node * head,int key){
   while(key--&&head->next!=NULL) head = head->next;
   if(key>0) printf("given key exceeds list length, so spitting last node data :   %d\n",head->data);
-  else printf("%d",head->data);
+  else printf("Node at key is %d\n",head->data);
 
+}
+
+void insertAfter(Node * prevNode,int data){
+ Node * newNode = createNode(data);
+ if(prevNode==NULL) printf("previous node cannot be null\n");
+ else{
+   newNode->next = prevNode->next;
+   prevNode->next = newNode;
+ }
+}
+
+void insertAtKey(int key,int data){
+  // TODO
+  return;
+}
+
+void append(Node **head,int data){
+ Node * last = (*head);
+ Node * newNode = createNode(data);
+ if((*head)==NULL){
+   (*head) = newNode;
+ }else{
+   while(last->next!=NULL) last= last->next;
+   last->next = newNode;
+ }
+}
+
+void deleteNode(Node ** head,int key){
+ struct node *temp = *head,*prev;
+
+ if(temp!=NULL&&temp->data==key){
+   *head = temp->next;
+   free(temp);
+   return;
+ }
+
+ while(temp!=NULL && temp->data!=key){
+   prev = temp;
+   temp = temp->next;
+ }
+ if(temp==NULL) return;
+
+ prev->next = temp->next;
+ free(temp);
+}
+
+void deletenodeKey(Node ** headref,int pos){
+  Node * temp = *headref;
+  if(pos==0){
+   //user wants to delete head
+   *headref = (*headref)->next;
+   free(temp);
+  }else{
+    while(pos>1){
+      temp = temp->next;
+      pos--;
+    }
+    if(temp==NULL){ printf("position key given is out of list bounds\n"); return;}
+    else{
+     Node * prev = temp->next;
+     temp->next = prev->next;
+     free(prev);
+    }
+  }
 }
 
 int main(){
@@ -58,5 +122,12 @@ int main(){
  push(&root,11);
  printList(root);
  printNode(root,2);
+ insertAfter(root,1993);
+ append(&root,1992);
+ printList(root);
+ deleteNode(&root,9);
+ printList(root);
+ deletenodeKey(&root,8);
+ printList(root);
  return 0;
 }
